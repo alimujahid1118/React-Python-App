@@ -13,7 +13,11 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://react-python-app-lyart.vercel.app"],
+    allow_origins=[
+        "https://react-python-app-lyart.vercel.app",  # Vercel frontend
+        "http://localhost:3000",                      # local testing
+        "https://react-python-app.vercel.app",       # any other alias
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
