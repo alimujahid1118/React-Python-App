@@ -13,7 +13,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://react-python-rgzt15zol-ali-mujahids-projects.vercel.app"],
+    allow_origins=["https://react-python-app-lyart.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

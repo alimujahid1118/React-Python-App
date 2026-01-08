@@ -6,7 +6,7 @@ import { Login } from "./pages/Login";
 import { Profile } from "./pages/Profile";
 import { useState } from "react";
 
-const API_URL = "https://react-python-app-production.up.railway.app";
+const API_URL = "https://react-python-app-euf3.onrender.com";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
