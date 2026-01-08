@@ -171,6 +171,7 @@ export function Posts({ isLoggedIn, setPosts, posts, API_URL }) {
           author={author}
           setAuthor={setAuthor}
           setOpenPostId={setOpenPostId}
+          API_URL={API_URL}
         />
       ) : (
         ""
