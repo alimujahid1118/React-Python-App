@@ -6,6 +6,8 @@ import { Login } from "./pages/Login";
 import { Profile } from "./pages/Profile";
 import { useState } from "react";
 
+const API_URL = "https://react-python-app-production.up.railway.app";
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     !!localStorage.getItem("access_token")
@@ -34,9 +36,15 @@ function App() {
           />
         }
       >
-        <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login Log_in={Log_in} />} />
+        <Route
+          path="/"
+          element={<HomePage isLoggedIn={isLoggedIn} API_URL={API_URL} />}
+        />
+        <Route path="/signup" element={<Signup API_URL={API_URL} />} />
+        <Route
+          path="/login"
+          element={<Login Log_in={Log_in} API_URL={API_URL} />}
+        />
         <Route
           path="/profile"
           element={
@@ -44,6 +52,7 @@ function App() {
               isLoggedIn={isLoggedIn}
               profile_img={profile_img}
               setProfile_img={setProfile_img}
+              API_URL={API_URL}
             />
           }
         />

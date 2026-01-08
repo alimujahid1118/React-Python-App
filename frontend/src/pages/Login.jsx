@@ -3,7 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 
-export function Login({ Log_in }) {
+export function Login({ Log_in, API_URL }) {
   const userName = useRef(null);
   const password = useRef(null);
   const navigate = useNavigate();
@@ -17,11 +17,9 @@ export function Login({ Log_in }) {
     };
 
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:8000/auth/login",
-        formData,
-        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-      );
+      const res = await axios.post(`${API_URL}/auth/login`, formData, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
 
       const token = res.data.access_token;
       localStorage.setItem("access_token", token);

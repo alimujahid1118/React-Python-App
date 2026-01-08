@@ -2,13 +2,13 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 
-function Post({ isLoggedIn, setPosts, setAuthor }) {
+function Post({ isLoggedIn, setPosts, setAuthor, API_URL }) {
   const content = useRef("");
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const res = await axios.get("http://127.0.0.1:8000/auth/get-profile", {
+      const res = await axios.get(`${API_URL}/auth/get-profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -26,7 +26,7 @@ function Post({ isLoggedIn, setPosts, setAuthor }) {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/auth/create-post",
+        `${API_URL}/auth/create-post`,
         {
           content: content_val,
         },
@@ -38,9 +38,7 @@ function Post({ isLoggedIn, setPosts, setAuthor }) {
         }
       );
 
-      const getRes = await axios.get(
-        "http://127.0.0.1:8000/auth/get-all-posts"
-      );
+      const getRes = await axios.get(`${API_URL}/auth/get-all-posts`);
 
       setPosts([...getRes.data].reverse());
 
@@ -86,7 +84,7 @@ function Post({ isLoggedIn, setPosts, setAuthor }) {
   );
 }
 
-export function Posts({ isLoggedIn, setPosts, posts }) {
+export function Posts({ isLoggedIn, setPosts, posts, API_URL }) {
   const token = localStorage.getItem("access_token");
   const [author, setAuthor] = useState(null);
   const [openPostId, setOpenPostId] = useState(null);
@@ -94,15 +92,12 @@ export function Posts({ isLoggedIn, setPosts, posts }) {
 
   const getPost = async (post_id) => {
     try {
-      const res = await axios.get(
-        `http://127.0.0.1:8000/auth/get-post/${post_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await axios.get(`${API_URL}/auth/get-post/${post_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       console.log(res.data);
       setOpenPostId(post_id);
     } catch (err) {
@@ -114,7 +109,7 @@ export function Posts({ isLoggedIn, setPosts, posts }) {
     // fetch all posts
     const fetchPosts = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/auth/get-all-posts");
+        const res = await axios.get(`${API_URL}/auth/get-all-posts`);
         setPosts([...res.data].reverse());
         console.log(res.data);
       } catch (err) {
@@ -127,7 +122,7 @@ export function Posts({ isLoggedIn, setPosts, posts }) {
   const updatePost = async (post_id) => {
     try {
       const res = await axios.put(
-        `http://127.0.0.1:8000/auth/update-post/${post_id}`,
+        `${API_URL}/auth/update-post/${post_id}`,
         {
           content: postInput.current.value,
         },
@@ -153,14 +148,11 @@ export function Posts({ isLoggedIn, setPosts, posts }) {
 
   const deletePost = async (post_id) => {
     try {
-      const res = await axios.delete(
-        `http://127.0.0.1:8000/auth/delete-post/${post_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.delete(`${API_URL}/auth/delete-post/${post_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(res.data);
       setPosts((prevPost) => prevPost.filter((post) => post.id !== post_id));
       setOpenPostId(null);

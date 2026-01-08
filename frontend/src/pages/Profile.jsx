@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-export function Profile({ isLoggedIn }) {
+export function Profile({ isLoggedIn, API_URL }) {
   const [profile, setProfile] = useState(null);
   const token = localStorage.getItem("access_token");
 
@@ -26,7 +26,7 @@ export function Profile({ isLoggedIn }) {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/auth/get-profile", {
+        const res = await axios.get(`${API_URL}/auth/get-profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -52,7 +52,7 @@ export function Profile({ isLoggedIn }) {
 
     try {
       if (profile) {
-        await axios.put("http://127.0.0.1:8000/auth/update-profile", payload, {
+        await axios.put(`${API_URL}/auth/update-profile`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -64,7 +64,7 @@ export function Profile({ isLoggedIn }) {
           position: "center",
         });
       } else {
-        await axios.post("http://127.0.0.1:8000/auth/create-profile", payload, {
+        await axios.post(`${API_URL}/auth/create-profile`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
@@ -78,7 +78,7 @@ export function Profile({ isLoggedIn }) {
   // Delete profile
   const deleteProfile = async () => {
     try {
-      await axios.delete("http://127.0.0.1:8000/auth/delete-profile", {
+      await axios.delete(`${API_URL}/auth/delete-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(null);

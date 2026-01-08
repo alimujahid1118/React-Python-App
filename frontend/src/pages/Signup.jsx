@@ -3,7 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 
-export function Signup() {
+export function Signup({ API_URL }) {
   const userName = useRef(null);
   const password = useRef(null);
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export function Signup() {
     };
 
     try {
-      await axios.post("http://127.0.0.1:8000/auth/signup", formData);
+      await axios.post(`${API_URL}/auth/signup`, formData);
       userName.current.value = "";
       password.current.value = "";
       Swal.fire({
