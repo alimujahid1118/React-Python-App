@@ -90,7 +90,7 @@ export function Profile({ isLoggedIn, API_URL }) {
   };
 
   return (
-    <div className="min-h-screen flex mt-[70px]">
+    <div className="min-h-[100vh] flex mt-[70px]">
       {/* Sidebar */}
       <aside className="w-1/3 px-4 md:px-0 md:w-1/5 bg-yellow-300 flex flex-col items-center py-10">
         <button
