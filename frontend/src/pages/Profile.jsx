@@ -63,6 +63,8 @@ export function Profile({ isLoggedIn, API_URL }) {
           confirmButtonText: "OK",
           position: "center",
         });
+        user_name.current.value = null;
+        user_bio.current.value = null;
       } else {
         await axios.post(`${API_URL}/auth/create-profile`, payload, {
           headers: { Authorization: `Bearer ${token}` },
@@ -70,6 +72,13 @@ export function Profile({ isLoggedIn, API_URL }) {
       }
 
       setProfile(payload);
+      Swal.fire({
+        title: "Success",
+        text: "Your profile has been created successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+        position: "center",
+      });
     } catch (err) {
       console.log(err);
     }
@@ -82,6 +91,13 @@ export function Profile({ isLoggedIn, API_URL }) {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(null);
+      Swal.fire({
+        title: "Success",
+        text: "Profile deleted successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+        position: "center",
+      });
     } catch (err) {
       console.log(err);
     }
@@ -110,10 +126,14 @@ export function Profile({ isLoggedIn, API_URL }) {
           {activeSelection === "profile" && (
             <div className="flex flex-col p-[60px] text-2xl space-y-8">
               {profile && (
-                <>
-                  <div>Name: {profile.name}</div>
-                  <div>Bio: {profile.bio}</div>
-                </>
+                <div className="space-y-2">
+                  <div className="bg-slate-200 px-2 py-2 rounded-lg">
+                    Name: {profile.name}
+                  </div>
+                  <div className="bg-slate-200 px-2 py-2 rounded-lg">
+                    Bio: {profile.bio}
+                  </div>
+                </div>
               )}
 
               <div className="flex flex-col space-y-4">
@@ -149,20 +169,29 @@ export function Profile({ isLoggedIn, API_URL }) {
                 </label>
 
                 <div className="flex">
-                  <button
-                    onClick={handleSave}
-                    className="bg-slate-200 w-[70%] hover:bg-white hover:border-[2px] hover:border-black flex items-center justify-center py-2 rounded-lg"
-                  >
-                    Update Profile
-                  </button>
-
-                  {profile && (
+                  {!profile && (
                     <button
-                      onClick={deleteProfile}
-                      className="bg-slate-200 w-[70%] ml-[10px] hover:bg-white hover:border-[2px] hover:border-black flex items-center justify-center py-2 rounded-lg"
+                      onClick={handleSave}
+                      className="bg-slate-200 w-[70%] hover:bg-white hover:border-[2px] hover:border-black flex items-center justify-center py-2 rounded-lg"
                     >
-                      Delete Profile
+                      Create Profile
                     </button>
+                  )}
+                  {profile && (
+                    <>
+                      <button
+                        onClick={handleSave}
+                        className="bg-slate-200 w-[70%] hover:bg-white hover:border-[2px] hover:border-black flex items-center justify-center py-2 rounded-lg"
+                      >
+                        Update Profile
+                      </button>
+                      <button
+                        onClick={deleteProfile}
+                        className="bg-slate-200 w-[70%] ml-[10px] hover:bg-white hover:border-[2px] hover:border-black flex items-center justify-center py-2 rounded-lg"
+                      >
+                        Delete Profile
+                      </button>
+                    </>
                   )}
                 </div>
               </div>

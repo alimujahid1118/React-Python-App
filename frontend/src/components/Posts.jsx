@@ -18,14 +18,14 @@ function Post({ isLoggedIn, setPosts, setAuthor, API_URL }) {
     };
 
     fetchProfile();
-  }, [setAuthor, token]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const content_val = content.current.value;
 
     try {
-      const res = await axios.post(
+      const RES = await axios.post(
         `${API_URL}/auth/create-post`,
         {
           content: content_val,
@@ -49,6 +49,7 @@ function Post({ isLoggedIn, setPosts, setAuthor, API_URL }) {
         confirmButtonText: "OK",
         position: "center",
       });
+      content.current.value = "";
     } catch (err) {
       Swal.fire({
         title: "Error!",
@@ -121,7 +122,7 @@ export function Posts({ isLoggedIn, setPosts, posts, API_URL }) {
 
   const updatePost = async (post_id) => {
     try {
-      const res = await axios.put(
+      const RES = await axios.put(
         `${API_URL}/auth/update-post/${post_id}`,
         {
           content: postInput.current.value,
@@ -141,6 +142,14 @@ export function Posts({ isLoggedIn, setPosts, posts, API_URL }) {
         )
       );
       setOpenPostId(null);
+      Swal.fire({
+        title: "Success",
+        text: "Post updated successfully",
+        icon: "success",
+        confirmButtonText: "OK",
+        position: "center",
+      });
+      postInput.current.value = null;
     } catch (err) {
       console.error(err);
     }
@@ -156,6 +165,13 @@ export function Posts({ isLoggedIn, setPosts, posts, API_URL }) {
       console.log(res.data);
       setPosts((prevPost) => prevPost.filter((post) => post.id !== post_id));
       setOpenPostId(null);
+      Swal.fire({
+        title: "Success!",
+        text: "Post deleted successfully",
+        icon: "success",
+        confirmButtonText: "OK",
+        position: "center",
+      });
     } catch (err) {
       console.log(err);
     }
@@ -177,10 +193,13 @@ export function Posts({ isLoggedIn, setPosts, posts, API_URL }) {
         ""
       )}
       <h1 className="text-black text-2xl mb-4 mt-[70px] text-center">
-        All Posts
+        All Posts - You can edit your post by clicking on it.
       </h1>
       {posts.length === 0 ? (
-        <p className="text-white">No posts available.</p>
+        <p className="text-slate-600 flex justify-center items-center mt-[100px]">
+          No posts available. It's due to Render sleeping. You need to try 2 3
+          times.
+        </p>
       ) : (
         posts.map((post) => (
           <div

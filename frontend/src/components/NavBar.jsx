@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import Swal from "sweetalert2";
 
 export function NavBar({ isLoggedIn, Log_out, profile_img }) {
   const [navItem, setNavItem] = useState(false);
@@ -65,6 +66,13 @@ export function NavBar({ isLoggedIn, Log_out, profile_img }) {
                               e.stopPropagation();
                               Log_out();
                               setNavItem(false);
+                              Swal.fire({
+                                title: "Success",
+                                text: "You have been logged out.",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                                position: "center",
+                              });
                             }}
                             className="hover:cursor-pointer"
                           >
