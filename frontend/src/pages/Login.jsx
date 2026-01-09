@@ -48,10 +48,10 @@ export function Login({ Log_in, API_URL }) {
   };
 
   return (
-    <div className="h-screen w-[100%] max-h-[700px] flex justify-center items-center">
-      <div className=" flex justify-center items-center space-x-[200px]">
+    <div className="h-screen max-w-[400px] max-h-[100px] md:h-screen md:w-[100%] md:max-h-[700px] md:flex md:items-center md:justify-center">
+      <div className="flex flex-col mt-[100px] space-y-[30px] md:flex md:justify-center md:items-center md:space-x-[200px]">
         <h1 className="text-6xl text-[30px] text-gray-600 text-center">
-          Welcome back
+          <strong>Welcome back</strong>
         </h1>
         <div className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-200 relative px-[50px] py-[50px] w-[3/5] h-[2/5] rounded-2xl mt-10 border-b-2 border-r-2 border-gray-500">
           <div>
