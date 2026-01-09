@@ -109,9 +109,9 @@ export function Profile({ isLoggedIn, API_URL }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex justify-center items-start py-10">
+      <main className="flex-1 flex justify-start ml-2 md:ml-0 md:justify-center items-start py-10">
         {activeSelection === "profile" && (
-          <div className="bg-white w-full max-w-2xl rounded-xl shadow-md p-6 md:p-10">
+          <div className="bg-white w-[80%] rounded-xl shadow-md p-6 md:p-10">
             <h2 className="text-2xl font-bold mb-6 text-center">
               {profile ? "Your Profile" : "Create Profile"}
             </h2>
