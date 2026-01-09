@@ -5,17 +5,14 @@ import Swal from "sweetalert2";
 
 export function Profile({ isLoggedIn, API_URL }) {
   const [profile, setProfile] = useState(null);
-  const token = localStorage.getItem("access_token");
-
-  const profileImg = useRef(null);
-  const user_name = useRef(null);
-  const user_bio = useRef(null);
-
   const [activeSelection, setActiveSelection] = useState("profile");
+
+  const token = localStorage.getItem("access_token");
   const navigate = useNavigate();
 
-  const show_Profile = () => setActiveSelection("profile");
-  const show_Friends = () => setActiveSelection("friends");
+  const profileImg = useRef(null);
+  const userName = useRef(null);
+  const userBio = useRef(null);
 
   // Redirect if not logged in
   useEffect(() => {
@@ -30,24 +27,20 @@ export function Profile({ isLoggedIn, API_URL }) {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!res.data?.detail) {
-          setProfile(res.data);
-        } else {
-          setProfile(null);
-        }
+        setProfile(res.data?.detail ? null : res.data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
 
     fetchProfile();
-  }, [token]);
+  }, [API_URL, token]);
 
-  // Create or Update profile
+  // Create or update profile
   const handleSave = async () => {
     const payload = {
-      name: user_name.current.value,
-      bio: user_bio.current.value,
+      name: userName.current.value,
+      bio: userBio.current.value,
     };
 
     try {
@@ -55,16 +48,6 @@ export function Profile({ isLoggedIn, API_URL }) {
         await axios.put(`${API_URL}/auth/update-profile`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        Swal.fire({
-          title: "Success!",
-          text: "Profile updated successfully",
-          icon: "success",
-          confirmButtonText: "OK",
-          position: "center",
-        });
-        user_name.current.value = null;
-        user_bio.current.value = null;
       } else {
         await axios.post(`${API_URL}/auth/create-profile`, payload, {
           headers: { Authorization: `Bearer ${token}` },
@@ -72,15 +55,17 @@ export function Profile({ isLoggedIn, API_URL }) {
       }
 
       setProfile(payload);
+
       Swal.fire({
         title: "Success",
-        text: "Your profile has been created successfully.",
+        text: profile
+          ? "Profile updated successfully."
+          : "Profile created successfully.",
         icon: "success",
         confirmButtonText: "OK",
-        position: "center",
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -90,115 +75,117 @@ export function Profile({ isLoggedIn, API_URL }) {
       await axios.delete(`${API_URL}/auth/delete-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       setProfile(null);
+
       Swal.fire({
-        title: "Success",
+        title: "Deleted",
         text: "Profile deleted successfully.",
         icon: "success",
         confirmButtonText: "OK",
-        position: "center",
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
   return (
-    <div className="flex bg-slate-200">
+    <div className="min-h-screen flex mt-[70px]">
       {/* Sidebar */}
-      <div className="flex justify-end w-[20%] h-[100vh]">
-        <div className="bg-yellow-300 text-white font-bold flex flex-col text-center h-[85%] w-[80%] mt-[80px] space-y-6 py-8">
-          <p className="h-[1px] flex ml-[8px] bg-white w-[90%]"></p>
-          <button onClick={show_Profile} className="hover:text-gray-500">
-            Profile
-          </button>
-          <p className="h-[1px] flex ml-[8px] bg-white w-[90%]"></p>
-          <button onClick={show_Friends} className="hover:text-gray-500">
-            Friends
-          </button>
-          <p className="h-[1px] flex ml-[8px] bg-white w-[90%]"></p>
-        </div>
-      </div>
+      <aside className="w-1/3 px-4 md:px-0 md:w-1/5 bg-yellow-300 flex flex-col items-center py-10">
+        <button
+          onClick={() => setActiveSelection("profile")}
+          className="font-semibold hover:text-gray-600"
+        >
+          Profile
+        </button>
+        <div className="w-3/4 h-px bg-white my-4" />
+        <button
+          onClick={() => setActiveSelection("friends")}
+          className="font-semibold hover:text-gray-600"
+        >
+          Friends
+        </button>
+      </aside>
 
-      {/* Content */}
-      <div className="justify-start w-[80%] h-[100vh]">
-        <div className="flex bg-white w-[95%] h-[85%] mt-[80px]">
-          {activeSelection === "profile" && (
-            <div className="flex flex-col p-[60px] text-2xl space-y-8">
-              {profile && (
-                <div className="space-y-2">
-                  <div className="bg-slate-200 px-2 py-2 rounded-lg">
-                    Name: {profile.name}
-                  </div>
-                  <div className="bg-slate-200 px-2 py-2 rounded-lg">
-                    Bio: {profile.bio}
-                  </div>
+      {/* Main Content */}
+      <main className="flex-1 flex justify-center items-start py-10">
+        {activeSelection === "profile" && (
+          <div className="bg-white w-full max-w-2xl rounded-xl shadow-md p-6 md:p-10">
+            <h2 className="text-2xl font-bold mb-6 text-center">
+              {profile ? "Your Profile" : "Create Profile"}
+            </h2>
+
+            {/* Existing Profile Info */}
+            {profile && (
+              <div className="mb-6 space-y-2">
+                <div className="bg-slate-200 rounded-md px-4 py-2">
+                  <strong>Name:</strong> {profile.name}
                 </div>
-              )}
-
-              <div className="flex flex-col space-y-4">
-                <label className="flex py-2 rounded-lg space-x-2">
-                  <span>
-                    {profile ? "Change Profile Img:" : "Create Profile Img:"}
-                  </span>
-                  <input
-                    type="file"
-                    className="rounded-sm max-w-[400px]"
-                    ref={profileImg}
-                  />
-                </label>
-
-                <label className="flex items-center py-2 rounded-lg">
-                  {profile ? "Change Name:" : "Create Name:"}
-                  <input
-                    type="text"
-                    defaultValue={profile?.name || ""}
-                    className="ml-1 rounded-sm border-[2px] py-2"
-                    ref={user_name}
-                  />
-                </label>
-
-                <label className="flex items-center py-2 rounded-lg">
-                  {profile ? "Change Bio:" : "Create Bio:"}
-                  <input
-                    type="text"
-                    defaultValue={profile?.bio || ""}
-                    className="ml-8 rounded-sm border-[2px] py-2"
-                    ref={user_bio}
-                  />
-                </label>
-
-                <div className="flex">
-                  {!profile && (
-                    <button
-                      onClick={handleSave}
-                      className="bg-slate-200 w-[70%] hover:bg-white hover:border-[2px] hover:border-black flex items-center justify-center py-2 rounded-lg"
-                    >
-                      Create Profile
-                    </button>
-                  )}
-                  {profile && (
-                    <>
-                      <button
-                        onClick={handleSave}
-                        className="bg-slate-200 w-[70%] hover:bg-white hover:border-[2px] hover:border-black flex items-center justify-center py-2 rounded-lg"
-                      >
-                        Update Profile
-                      </button>
-                      <button
-                        onClick={deleteProfile}
-                        className="bg-slate-200 w-[70%] ml-[10px] hover:bg-white hover:border-[2px] hover:border-black flex items-center justify-center py-2 rounded-lg"
-                      >
-                        Delete Profile
-                      </button>
-                    </>
-                  )}
+                <div className="bg-slate-200 rounded-md px-4 py-2">
+                  <strong>Bio:</strong> {profile.bio}
                 </div>
               </div>
+            )}
+
+            {/* Form */}
+            <div className="flex flex-col gap-5">
+              {/* Profile Image */}
+              <label className="flex flex-col md:flex-row md:items-center gap-2">
+                <span className="md:w-36">
+                  {profile ? "Change Image:" : "Profile Image:"}
+                </span>
+                <input type="file" ref={profileImg} />
+              </label>
+
+              {/* Name */}
+              <label className="flex flex-col md:flex-row md:items-center gap-2">
+                <span className="md:w-36">
+                  {profile ? "Change Name:" : "Name:"}
+                </span>
+                <input
+                  type="text"
+                  defaultValue={profile?.name || ""}
+                  ref={userName}
+                  className="w-full border-2 rounded-md px-3 py-2"
+                />
+              </label>
+
+              {/* Bio */}
+              <label className="flex flex-col md:flex-row md:items-center gap-2">
+                <span className="md:w-36">
+                  {profile ? "Change Bio:" : "Bio:"}
+                </span>
+                <input
+                  type="text"
+                  defaultValue={profile?.bio || ""}
+                  ref={userBio}
+                  className="w-full border-2 rounded-md px-3 py-2"
+                />
+              </label>
+
+              {/* Actions */}
+              <div className="flex flex-col md:flex-row gap-4 mt-6">
+                <button
+                  onClick={handleSave}
+                  className="w-full bg-slate-200 hover:bg-white hover:border-2 hover:border-black py-3 rounded-lg"
+                >
+                  {profile ? "Update Profile" : "Create Profile"}
+                </button>
+
+                {profile && (
+                  <button
+                    onClick={deleteProfile}
+                    className="w-full bg-slate-200 hover:bg-white hover:border-2 hover:border-black py-3 rounded-lg"
+                  >
+                    Delete Profile
+                  </button>
+                )}
+              </div>
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

@@ -46,8 +46,8 @@ export function Signup({ API_URL }) {
   };
 
   return (
-    <div className="h-screen max-w-[400px] max-h-[100px] md:h-screen md:w-[100%] md:max-h-[700px] md:flex md:items-center md:justify-center">
-      <div className="flex flex-col mt-[220px] space-y-[30px] md:flex md:justify-center md:items-center md:space-x-[200px]">
+    <div className="h-screen max-w-[400px] max-h-[100px] md:w-[100%] md:max-w-[100%] md:max-h-[400px] md:items-center md:justify-center">
+      <div className="flex flex-col mt-[220px] space-y-[30px] md:mt-[150px] md:flex-row md:justify-center md:items-center md:space-x-[200px]">
         <h1 className="text-6xl text-[30px] text-gray-600 text-center">
           <strong>Join us today!</strong>
         </h1>

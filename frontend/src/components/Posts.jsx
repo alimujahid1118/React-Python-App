@@ -192,7 +192,7 @@ export function Posts({ isLoggedIn, setPosts, posts, API_URL }) {
       ) : (
         ""
       )}
-      <h1 className="text-black text-2xl mb-4 mt-[70px] text-center">
+      <h1 className="text-black text-2xl mb-8 mt-[70px] text-center">
         All Posts - You can edit your post by clicking on it.
       </h1>
       {posts.length === 0 ? (
